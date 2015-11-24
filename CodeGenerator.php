@@ -8,38 +8,45 @@
  */
 class CodeGenerator
 {
-    public  static function createClass($classPrefix,$className, $extendsFrom = null, $privateAttributes= array(), $publicAttributes = array()){
-        $Class="class $className{ \n";
+    public  static function createClass($classPrefix = null, $className, $extendsFrom = null, $privateAttributes= array(), $publicAttributes = array()){
+        if(!is_null($classPrefix)){
+            $classTxt = $classPrefix." ";
+        }
+        $classTxt="class $className{ \n";
         for($i=0; $i<count($privateAttributes); $i++)
         {
-            $Class.="private $".$privateAttributes[$i]."; \n";
+            $classTxt.="private $".$privateAttributes[$i]."; \n";
         }
-        $Class.="public function __construct(";
-        for($i=0; $i<count($privateAttributes); $i++)
+        for($i=0; $i<count($publicAttributes); $i++)
         {
-            $Class.="$".$privateAttributes[$i];
-            if($i<count($privateAttributes)-1){
-                $Class.=",";
-            }
+            $classTxt.="public $".$privateAttributes[$i]."; \n";
         }
-        $Class.="){\n";
+        $classTxt.="public function __construct(";
+//        for($i=0; $i<count($privateAttributes); $i++)
+//        {
+//            $classTxt.="$".$privateAttributes[$i];
+//            if($i<count($privateAttributes)-1){
+//                $classTxt.=",";
+//            }
+//        }
+        $classTxt.="){\n";
 
         for($i=0; $i<count($privateAttributes); $i++)
         {
-            $Class.="$"."this->Set".$privateAttributes[$i]."($".$privateAttributes[$i].");\n";
+            $classTxt.="$"."this->Set".$privateAttributes[$i]."($".$privateAttributes[$i].");\n";
         }
-        $Class.="}\n";
+        $classTxt.="}\n";
         for($i=0; $i<count($privateAttributes); $i++)
         {
-            $Class.="public function Set".$privateAttributes[$i]."($".$privateAttributes[$i]."){ \n".
+            $classTxt.="public function Set".$privateAttributes[$i]."($".$privateAttributes[$i]."){ \n".
                 "$"."this->".$privateAttributes[$i]."=$".$privateAttributes[$i].";\n".
                 "}\n";
 
-            $Class.="public function Get".$privateAttributes[$i]."(){ \n".
+            $classTxt.="public function Get".$privateAttributes[$i]."(){ \n".
                 "return $"."this->".$privateAttributes[$i].";\n".
                 "}\n";
         }
-        $Class.="}\n";
-        return $Class;
+        $classTxt.="}\n";
+        return $classTxt;
     }
 }
