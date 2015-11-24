@@ -1,0 +1,3 @@
+<?php
+$className = $argv[1];
+echo $className."\n";
